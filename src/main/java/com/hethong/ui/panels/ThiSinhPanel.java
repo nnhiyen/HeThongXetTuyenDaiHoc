@@ -10,6 +10,7 @@ import java.awt.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class ThiSinhPanel extends JPanel {
@@ -144,7 +145,7 @@ public class ThiSinhPanel extends JPanel {
         gbc.insets = new Insets(4, 5, 4, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        String[] labels = {"CCCD *:", "Họ tên *:", "Ngày sinh (yyyy-MM-dd):", "Giới tính:", "Địa chỉ:", "SĐT:", "Email:", "Trường THPT:", "Năm TN:"};
+        String[] labels = {"CCCD *:", "Họ tên *:", "Ngày sinh (yyyy-MM-dd):", "Giới tính:", "Địa chỉ:", "SĐT:", "Email:", "Trường THPT:", "Năm tốt nghiệp:"};
         for (int i = 0; i < labels.length; i++) {
             gbc.gridx = 0; gbc.gridy = i; gbc.weightx = 0;
             panel.add(new JLabel(labels[i]), gbc);
@@ -182,13 +183,27 @@ public class ThiSinhPanel extends JPanel {
                 ThiSinh ts = new ThiSinh();
                 ts.setCccd(fields[0].getText().trim());
                 ts.setHoTen(fields[1].getText().trim());
-                ts.setNgaySinh(fields[2].getText().trim().isEmpty() ? null : LocalDate.parse(fields[2].getText().trim()));
+                if (!fields[2].getText().trim().isEmpty()) {
+                    try {
+                        ts.setNgaySinh(LocalDate.parse(fields[2].getText().trim()));
+                    } catch (DateTimeParseException dtpe) {
+                        JOptionPane.showMessageDialog(dialog, "Ngày sinh không hợp lệ. Vui lòng nhập theo định dạng yyyy-MM-dd (ví dụ: 2005-03-15)", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
                 ts.setGioiTinh(fields[3].getText().trim());
                 ts.setDiaChi(fields[4].getText().trim());
                 ts.setSoDienThoai(fields[5].getText().trim());
                 ts.setEmail(fields[6].getText().trim());
                 ts.setTruongThptTotNghiep(fields[7].getText().trim());
-                ts.setNamTotNghiep(fields[8].getText().trim().isEmpty() ? null : Integer.parseInt(fields[8].getText().trim()));
+                if (!fields[8].getText().trim().isEmpty()) {
+                    try {
+                        ts.setNamTotNghiep(Integer.parseInt(fields[8].getText().trim()));
+                    } catch (NumberFormatException nfe) {
+                        JOptionPane.showMessageDialog(dialog, "Năm tốt nghiệp không hợp lệ. Vui lòng nhập một số nguyên (ví dụ: 2023)", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
                 dao.save(ts);
                 loadData();
                 dialog.dispose();
@@ -240,13 +255,31 @@ public class ThiSinhPanel extends JPanel {
         btnSave.addActionListener(e -> {
             try {
                 ts.setHoTen(fields[1].getText().trim());
-                ts.setNgaySinh(fields[2].getText().trim().isEmpty() ? null : LocalDate.parse(fields[2].getText().trim()));
+                if (!fields[2].getText().trim().isEmpty()) {
+                    try {
+                        ts.setNgaySinh(LocalDate.parse(fields[2].getText().trim()));
+                    } catch (DateTimeParseException dtpe) {
+                        JOptionPane.showMessageDialog(dialog, "Ngày sinh không hợp lệ. Vui lòng nhập theo định dạng yyyy-MM-dd (ví dụ: 2005-03-15)", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                } else {
+                    ts.setNgaySinh(null);
+                }
                 ts.setGioiTinh(fields[3].getText().trim());
                 ts.setDiaChi(fields[4].getText().trim());
                 ts.setSoDienThoai(fields[5].getText().trim());
                 ts.setEmail(fields[6].getText().trim());
                 ts.setTruongThptTotNghiep(fields[7].getText().trim());
-                ts.setNamTotNghiep(fields[8].getText().trim().isEmpty() ? null : Integer.parseInt(fields[8].getText().trim()));
+                if (!fields[8].getText().trim().isEmpty()) {
+                    try {
+                        ts.setNamTotNghiep(Integer.parseInt(fields[8].getText().trim()));
+                    } catch (NumberFormatException nfe) {
+                        JOptionPane.showMessageDialog(dialog, "Năm tốt nghiệp không hợp lệ. Vui lòng nhập một số nguyên (ví dụ: 2023)", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                } else {
+                    ts.setNamTotNghiep(null);
+                }
                 dao.update(ts);
                 loadData();
                 dialog.dispose();

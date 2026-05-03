@@ -157,8 +157,22 @@ public class NguyenVongPanel extends JPanel {
                 nv.setThiSinh((ThiSinh) cboThiSinh.getSelectedItem());
                 nv.setNganh((Nganh) cboNganh.getSelectedItem());
                 nv.setToHopMon((ToHopMon) cboToHop.getSelectedItem());
-                nv.setThuTu(txtThuTu.getText().trim().isEmpty() ? null : Integer.parseInt(txtThuTu.getText().trim()));
-                nv.setDiemXetTuyen(txtDiemXetTuyen.getText().trim().isEmpty() ? null : Double.parseDouble(txtDiemXetTuyen.getText().trim()));
+                if (!txtThuTu.getText().trim().isEmpty()) {
+                    try {
+                        nv.setThuTu(Integer.parseInt(txtThuTu.getText().trim()));
+                    } catch (NumberFormatException nfe) {
+                        JOptionPane.showMessageDialog(dialog, "Thứ tự không hợp lệ. Vui lòng nhập một số nguyên (ví dụ: 1)", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+                if (!txtDiemXetTuyen.getText().trim().isEmpty()) {
+                    try {
+                        nv.setDiemXetTuyen(Double.parseDouble(txtDiemXetTuyen.getText().trim()));
+                    } catch (NumberFormatException nfe) {
+                        JOptionPane.showMessageDialog(dialog, "Điểm xét tuyển không hợp lệ. Vui lòng nhập số thực (ví dụ: 25.5)", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
                 nv.setTrangThai((String) cboTrangThai.getSelectedItem());
                 dao.save(nv); loadData(); dialog.dispose();
                 JOptionPane.showMessageDialog(this, "Thêm nguyện vọng thành công!");
@@ -218,8 +232,26 @@ public class NguyenVongPanel extends JPanel {
                 nv.setThiSinh((ThiSinh) cboThiSinh.getSelectedItem());
                 nv.setNganh((Nganh) cboNganh.getSelectedItem());
                 nv.setToHopMon((ToHopMon) cboToHop.getSelectedItem());
-                nv.setThuTu(txtThuTu.getText().trim().isEmpty() ? null : Integer.parseInt(txtThuTu.getText().trim()));
-                nv.setDiemXetTuyen(txtDiemXetTuyen.getText().trim().isEmpty() ? null : Double.parseDouble(txtDiemXetTuyen.getText().trim()));
+                if (!txtThuTu.getText().trim().isEmpty()) {
+                    try {
+                        nv.setThuTu(Integer.parseInt(txtThuTu.getText().trim()));
+                    } catch (NumberFormatException nfe) {
+                        JOptionPane.showMessageDialog(dialog, "Thứ tự không hợp lệ. Vui lòng nhập một số nguyên (ví dụ: 1)", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                } else {
+                    nv.setThuTu(null);
+                }
+                if (!txtDiemXetTuyen.getText().trim().isEmpty()) {
+                    try {
+                        nv.setDiemXetTuyen(Double.parseDouble(txtDiemXetTuyen.getText().trim()));
+                    } catch (NumberFormatException nfe) {
+                        JOptionPane.showMessageDialog(dialog, "Điểm xét tuyển không hợp lệ. Vui lòng nhập số thực (ví dụ: 25.5)", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                } else {
+                    nv.setDiemXetTuyen(null);
+                }
                 nv.setTrangThai((String) cboTrangThai.getSelectedItem());
                 dao.update(nv); loadData(); dialog.dispose();
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
