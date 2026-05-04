@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<!--
+  Connection credentials (URL, username, password) are NOT stored here.
+  They are supplied at runtime by HibernateUtil via environment variables:
+    DB_HOST  (default: localhost)
+    DB_PORT  (default: 3306)
+    DB_NAME  (default: hethong_xet_tuyen)
+    DB_USER  (default: root)
+    DB_PASS  (default: root)
+-->
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.show_sql">false</property>
+        <property name="hibernate.format_sql">false</property>
+        <property name="hibernate.connection.pool_size">10</property>
+        <mapping class="com.hethong.model.NguoiDung"/>
+        <mapping class="com.hethong.model.ThiSinh"/>
+        <mapping class="com.hethong.model.Nganh"/>
+        <mapping class="com.hethong.model.ToHopMon"/>
+        <mapping class="com.hethong.model.NganhToHop"/>
+        <mapping class="com.hethong.model.DiemThiSinh"/>
+        <mapping class="com.hethong.model.DiemCong"/>
+        <mapping class="com.hethong.model.NguyenVong"/>
+        <mapping class="com.hethong.model.BangQuyDoi"/>
+    </session-factory>
+</hibernate-configuration>
