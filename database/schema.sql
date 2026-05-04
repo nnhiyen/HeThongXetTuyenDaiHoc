@@ -90,9 +90,11 @@ CREATE TABLE IF NOT EXISTS bang_quy_doi (
 );
 
 -- Sample data
+-- Passwords are BCrypt-hashed. Defaults: admin → admin123, user1 → user123
+-- Change these via the UI after first login.
 INSERT INTO nguoi_dung (ten_dang_nhap, mat_khau, ho_ten, email, quyen, trang_thai, ngay_tao) VALUES
-('admin', 'admin123', 'Administrator', 'admin@example.com', 'ADMIN', TRUE, CURDATE()),
-('user1', 'user123', 'Nguyễn Văn A', 'user1@example.com', 'USER', TRUE, CURDATE());
+('admin', '$2a$10$8uvEtyv1m72Ew1u7FfPRS..Qs1Z9B1CmbqI9qGa0.xbLVsU02nRjq', 'Administrator', 'admin@example.com', 'ADMIN', TRUE, CURDATE()),
+('user1', '$2a$10$r0xnbGplhDN20MKiXR1mNeTvlA616n1AyWTeneBWuUAp9F7w5KBcu', 'Nguyễn Văn A', 'user1@example.com', 'USER', TRUE, CURDATE());
 
 INSERT INTO nganh (ma_nganh, ten_nganh, mo_ta, chi_tieu_tuyen, diem_san_loc) VALUES
 ('CNTT', 'Công nghệ thông tin', 'Ngành CNTT chất lượng cao', 200, 20.0),

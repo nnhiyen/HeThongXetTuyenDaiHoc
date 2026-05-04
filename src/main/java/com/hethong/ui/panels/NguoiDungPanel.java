@@ -2,6 +2,7 @@ package com.hethong.ui.panels;
 
 import com.hethong.dao.NguoiDungDAO;
 import com.hethong.model.NguoiDung;
+import com.hethong.util.PasswordUtil;
 import com.opencsv.CSVReader;
 
 import javax.swing.*;
@@ -128,7 +129,7 @@ public class NguoiDungPanel extends JPanel {
             try {
                 NguoiDung u = new NguoiDung();
                 u.setTenDangNhap(tenDN);
-                u.setMatKhau(matKhau);
+                u.setMatKhau(PasswordUtil.hash(matKhau));
                 u.setHoTen(txtHoTen.getText().trim());
                 u.setEmail(txtEmail.getText().trim());
                 u.setQuyen((String) cboQuyen.getSelectedItem());
@@ -257,7 +258,7 @@ public class NguoiDungPanel extends JPanel {
             String pass = new String(newPass.getPassword());
             if (!pass.isEmpty()) {
                 try {
-                    u.setMatKhau(pass);
+                    u.setMatKhau(PasswordUtil.hash(pass));
                     dao.update(u);
                     JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công!");
                 } catch (Exception ex) {
@@ -282,7 +283,8 @@ public class NguoiDungPanel extends JPanel {
                 try {
                     NguoiDung u = new NguoiDung();
                     u.setTenDangNhap(line[0].trim());
-                    u.setMatKhau(line[1].trim());
+                    String rawPass = line[1].trim();
+                    u.setMatKhau(rawPass.isEmpty() ? PasswordUtil.hash("changeme") : PasswordUtil.hash(rawPass));
                     u.setHoTen(line[2].trim());
                     u.setEmail(line.length > 3 ? line[3].trim() : "");
                     u.setQuyen(line.length > 4 ? line[4].trim() : "USER");

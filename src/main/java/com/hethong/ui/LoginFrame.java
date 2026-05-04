@@ -2,9 +2,11 @@ package com.hethong.ui;
 
 import com.hethong.dao.NguoiDungDAO;
 import com.hethong.model.NguoiDung;
+import com.hethong.util.PasswordUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.List;
 
 public class LoginFrame extends JFrame {
@@ -93,33 +95,25 @@ public class LoginFrame extends JFrame {
         SwingWorker<NguoiDung, Void> worker = new SwingWorker<>() {
             @Override
             protected NguoiDung doInBackground() {
-                try {
-                    List<NguoiDung> all = nguoiDungDAO.findAll();
-                    if (all.isEmpty()) {
-                        // Fallback hardcoded credentials when DB is empty
-                        if ("admin".equals(username) && "admin123".equals(password)) {
-                            NguoiDung fallback = new NguoiDung();
-                            fallback.setTenDangNhap("admin");
-                            fallback.setHoTen("Administrator");
-                            fallback.setQuyen("ADMIN");
-                            fallback.setTrangThai(true);
-                            return fallback;
-                        }
-                        return null;
-                    }
-                    return nguoiDungDAO.findByTenDangNhapAndMatKhau(username, password);
-                } catch (Exception ex) {
-                    // DB not available: use hardcoded fallback
-                    if ("admin".equals(username) && "admin123".equals(password)) {
-                        NguoiDung fallback = new NguoiDung();
-                        fallback.setTenDangNhap("admin");
-                        fallback.setHoTen("Administrator");
-                        fallback.setQuyen("ADMIN");
-                        fallback.setTrangThai(true);
-                        return fallback;
-                    }
+                List<NguoiDung> all = nguoiDungDAO.findAll();
+                if (all.isEmpty()) {
+                    // First run: create the default admin account with a hashed password.
+                    NguoiDung admin = new NguoiDung();
+                    admin.setTenDangNhap("admin");
+                    admin.setMatKhau(PasswordUtil.hash("admin123"));
+                    admin.setHoTen("Administrator");
+                    admin.setEmail("admin@example.com");
+                    admin.setQuyen("ADMIN");
+                    admin.setTrangThai(true);
+                    admin.setNgayTao(LocalDate.now());
+                    nguoiDungDAO.save(admin);
+                    all = nguoiDungDAO.findAll();
+                }
+                NguoiDung user = nguoiDungDAO.findByTenDangNhap(username);
+                if (user == null || !user.isTrangThai()) {
                     return null;
                 }
+                return PasswordUtil.verify(password, user.getMatKhau()) ? user : null;
             }
 
             @Override
@@ -146,3 +140,4 @@ public class LoginFrame extends JFrame {
         worker.execute();
     }
 }
+

@@ -2,12 +2,18 @@
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<!--
+  Connection credentials (URL, username, password) are NOT stored here.
+  They are supplied at runtime by HibernateUtil via environment variables:
+    DB_HOST  (default: localhost)
+    DB_PORT  (default: 3306)
+    DB_NAME  (default: hethong_xet_tuyen)
+    DB_USER  (default: root)
+    DB_PASS  (default: root)
+-->
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/hethong_xet_tuyen?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true</property>
-        <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">root</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="hibernate.show_sql">false</property>
